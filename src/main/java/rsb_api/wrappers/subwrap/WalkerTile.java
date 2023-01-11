@@ -23,7 +23,7 @@ public class WalkerTile extends RSTile implements Clickable07, Positionable {
     private MethodContext ctx;
 
     public WalkerTile(WalkerTile tile) {
-		// XXX why not use the tile.plane?
+        // XXX why not use the tile.plane?
         super(tile.getX(), tile.getY(), tile.ctx.proxy.getPlane());
         this.ctx = tile.ctx;
         type = tile.type;
@@ -122,7 +122,7 @@ public class WalkerTile extends RSTile implements Clickable07, Positionable {
     }
 
     public WalkerTile toSceneTile() {
-		// XXX does this lose the plane?
+        // XXX does this lose the plane?
         WalkerTile walkerTile = new WalkerTile(this);
         if (walkerTile.type != TYPES.SCENE) {
             if (walkerTile.type == TYPES.WORLD) {
@@ -165,8 +165,8 @@ public class WalkerTile extends RSTile implements Clickable07, Positionable {
     }
 
     public WalkerTile translate(int x, int y) {
-		// ??? where is this used, and shouldnt it return a copy.  why bother returning if doing
-		// local translation...
+        // ??? where is this used, and shouldnt it return a copy.  why bother returning if doing
+        // local translation...
         this.x += x;
         this.y += y;
         return this;

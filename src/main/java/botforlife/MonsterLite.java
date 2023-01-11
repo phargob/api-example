@@ -112,9 +112,9 @@ public class MonsterLite extends ScriptRunner {
             return false;
         }
 
-		// other forms of interating...
-		return (monster.getInteracting() == null &&
-				!monster.isInteractingWithLocalPlayer());
+        // other forms of interating...
+        return (monster.getInteracting() == null &&
+                !monster.isInteractingWithLocalPlayer());
     }
 
     private int doAttackAMonster(RSPlayer myself) {

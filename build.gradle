@@ -1,0 +1,120 @@
+plugins {
+    id 'java'
+}
+
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.slf4j:slf4j-simple:2.0.5'
+
+    implementation group: 'net.sf.jopt-simple', name: 'jopt-simple', version: '5.0.4'
+
+    // We want these both at compile and at runtime.
+    // So we use implementation instead of compileOnly or runtimeOnly
+    implementation project(":OSRSBotx")
+}
+
+group = 'osrsb'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+jar {
+    configurations.implementation.setCanBeResolved(true)
+
+    exclude 'META-INF/*.RSA'
+    exclude 'META-INF/*.SF'
+    exclude 'META-INF/*.DSA'
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+enum OperatingSystem {
+    MAC, WINDOWS, LINUX, UNKNOWN
+
+    static def getOperatingSystem() {
+        final String os = System.getProperty("os.name")
+        if (os.contains("Mac")) {
+            return MAC
+        } else if (os.contains("Windows")) {
+            return WINDOWS
+        } else if (os.contains("Linux")) {
+            return LINUX
+        } else {
+            return UNKNOWN
+        }
+    }
+
+    static def String getBotDirectory() {
+        final String NAME = "OsrsBot"
+        final String DIRECTORY = "/Scripts/";
+        final String env = System.getenv(NAME.toUpperCase().concat("_HOME"))
+        if (env == null || env.isEmpty()) {
+            String homeDirBuilder = System.getProperty("user.home")
+            switch (getOperatingSystem()) {
+                case LINUX:
+                    homeDirBuilder += File.separator + ".config"
+                    break
+                case MAC:
+                    homeDirBuilder += (homeDirBuilder == null) ? "~" : ""
+                    break
+                case WINDOWS:
+                    //Do nothing
+                    break
+                default:
+                    //If you're using Solaris or something you're wrong.
+                    break
+            }
+            return (homeDirBuilder + File.separator + NAME + DIRECTORY)
+        }
+
+        return env
+    }
+
+    static def treeCopy(File dirFrom, File dirTo) {
+        if (!dirTo.exists()) {
+            dirTo.mkdir()
+        }
+
+        dirFrom.eachFile(groovy.io.FileType.FILES) { File source ->
+            File target = new File(dirTo, source.getName())
+            target.bytes = source.bytes
+        }
+
+        dirFrom.eachFile(groovy.io.FileType.DIRECTORIES) { File source ->
+            File target = new File(dirTo, source.getName())
+            treeCopy(source, target)
+        }
+    }
+
+}
+
+class ScriptTaskJar extends DefaultTask {
+    @InputDirectory
+    var scriptDependency =
+            project.file("${project.buildDir}/libs")
+
+    @OutputDirectory
+    var outputDir =
+            project.file(OperatingSystem.getBotDirectory())
+
+    @TaskAction
+    def copyFiles() {
+        OperatingSystem.treeCopy(scriptDependency, outputDir)
+    }
+}
+
+task push(type: ScriptTaskJar) {
+    group = 'TEST'
+    dependsOn(jar)
+}
+

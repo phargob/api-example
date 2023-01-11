@@ -1,0 +1,2 @@
+include ":OSRSBotx"
+project(":OSRSBotx").projectDir = file("../OSRSBotx")

@@ -6,7 +6,7 @@ import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.cache.definitions.ObjectDefinition;
 
 import net.runelite.rsb.utils.Filter;
-import net.runelite.rsb.internal.globval.*;
+import rsb_api.globval.*;
 import rsb_api.wrappers.*;
 
 import java.lang.Integer;

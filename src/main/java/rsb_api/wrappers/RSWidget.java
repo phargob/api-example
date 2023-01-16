@@ -2,7 +2,7 @@ package rsb_api.wrappers;
 
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetItem;
-import net.runelite.rsb.internal.globval.GlobalWidgetInfo;
+import rsb_api.globval.GlobalWidgetInfo;
 import rsb_api.methods.MethodContext;
 import rsb_api.wrappers.common.Clickable07;
 

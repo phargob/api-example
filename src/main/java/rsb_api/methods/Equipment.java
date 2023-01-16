@@ -1,7 +1,7 @@
 package rsb_api.methods;
 
-import net.runelite.rsb.internal.globval.WidgetIndices;
-import net.runelite.rsb.internal.globval.enums.InterfaceTab;
+import rsb_api.globval.WidgetIndices;
+import rsb_api.globval.enums.InterfaceTab;
 import rsb_api.wrappers.RSItem;
 import rsb_api.wrappers.RSWidget;
 

@@ -5,7 +5,7 @@ import com.google.gson.stream.JsonReader;
 import net.runelite.cache.definitions.ItemDefinition;
 import net.runelite.cache.definitions.NpcDefinition;
 import net.runelite.cache.definitions.ObjectDefinition;
-import net.runelite.rsb.internal.globval.GlobalConfiguration;
+import net.runelite.rsb.internal.GlobalConfiguration;
 import rsb_api.wrappers.RSItem;
 import rsb_api.wrappers.RSNPC;
 import rsb_api.wrappers.RSObject;

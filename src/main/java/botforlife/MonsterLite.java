@@ -8,11 +8,11 @@ import net.runelite.api.NPC;
 
 import net.runelite.rsb.script.ScriptManifest;
 
-import net.runelite.rsb.internal.globval.VarpIndices;
-import net.runelite.rsb.internal.globval.GlobalWidgetInfo;
-import net.runelite.rsb.internal.globval.VarpValues;
+import rsb_api.globval.VarpIndices;
+import rsb_api.globval.GlobalWidgetInfo;
+import rsb_api.globval.VarpValues;
 
-import net.runelite.rsb.internal.globval.enums.InterfaceTab;
+import rsb_api.globval.enums.InterfaceTab;
 
 import rsb_api.methods.NPCs;
 

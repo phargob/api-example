@@ -2,12 +2,12 @@ package rsb_api.methods;
 
 import net.runelite.api.GameState;
 import net.runelite.api.widgets.WidgetID;
-import net.runelite.rsb.internal.globval.GlobalWidgetInfo;
-import net.runelite.rsb.internal.globval.VarcIntIndices;
-import net.runelite.rsb.internal.globval.VarcIntValues;
-import net.runelite.rsb.internal.globval.WidgetIndices;
-import net.runelite.rsb.internal.globval.enums.InterfaceTab;
-import net.runelite.rsb.internal.globval.enums.ViewportLayout;
+import rsb_api.globval.GlobalWidgetInfo;
+import rsb_api.globval.VarcIntIndices;
+import rsb_api.globval.VarcIntValues;
+import rsb_api.globval.WidgetIndices;
+import rsb_api.globval.enums.InterfaceTab;
+import rsb_api.globval.enums.ViewportLayout;
 import rsb_api.wrappers.*;
 
 import java.awt.*;

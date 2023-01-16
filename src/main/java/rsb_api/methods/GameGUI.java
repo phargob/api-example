@@ -2,10 +2,10 @@ package rsb_api.methods;
 
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.widgets.Widget;
-import net.runelite.rsb.internal.globval.WidgetIndices;
-import net.runelite.rsb.internal.globval.GlobalWidgetInfo;
-import net.runelite.rsb.internal.globval.enums.InterfaceTab;
-import net.runelite.rsb.internal.globval.enums.ViewportLayout;
+import rsb_api.globval.WidgetIndices;
+import rsb_api.globval.GlobalWidgetInfo;
+import rsb_api.globval.enums.InterfaceTab;
+import rsb_api.globval.enums.ViewportLayout;
 
 /**
  * For internal use to find GUI components.

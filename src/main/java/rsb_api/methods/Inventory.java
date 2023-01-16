@@ -4,9 +4,9 @@ import net.runelite.api.ItemComposition;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.cache.definitions.ItemDefinition;
 import net.runelite.client.ui.DrawManager;
-import net.runelite.rsb.internal.globval.GlobalWidgetInfo;
-import net.runelite.rsb.internal.globval.WidgetIndices;
-import net.runelite.rsb.internal.globval.enums.InterfaceTab;
+import rsb_api.globval.GlobalWidgetInfo;
+import rsb_api.globval.WidgetIndices;
+import rsb_api.globval.enums.InterfaceTab;
 import rsb_api.wrappers.*;
 
 import java.awt.*;

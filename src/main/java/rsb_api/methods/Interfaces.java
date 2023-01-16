@@ -3,8 +3,8 @@ package rsb_api.methods;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
 
-import net.runelite.rsb.internal.globval.GlobalWidgetInfo;
-import net.runelite.rsb.internal.globval.WidgetIndices;
+import rsb_api.globval.GlobalWidgetInfo;
+import rsb_api.globval.WidgetIndices;
 import rsb_api.wrappers.RSWidget;
 
 import java.awt.Point;

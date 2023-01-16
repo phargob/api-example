@@ -1,10 +1,10 @@
 package rsb_api.methods;
 
 import net.runelite.api.Skill;
-import net.runelite.rsb.internal.globval.GlobalWidgetInfo;
-import net.runelite.rsb.internal.globval.WidgetIndices;
-import net.runelite.rsb.internal.globval.enums.InterfaceTab;
-import net.runelite.rsb.internal.globval.enums.Prayers;
+import rsb_api.globval.GlobalWidgetInfo;
+import rsb_api.globval.WidgetIndices;
+import rsb_api.globval.enums.InterfaceTab;
+import rsb_api.globval.enums.Prayers;
 import rsb_api.wrappers.RSWidget;
 
 import java.util.ArrayList;

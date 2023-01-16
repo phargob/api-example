@@ -2,10 +2,10 @@ package rsb_api.methods;
 
 import net.runelite.api.Actor;
 import net.runelite.api.Skill;
-import net.runelite.rsb.internal.globval.VarpIndices;
-import net.runelite.rsb.internal.globval.GlobalWidgetInfo;
-import net.runelite.rsb.internal.globval.VarpValues;
-import net.runelite.rsb.internal.globval.enums.InterfaceTab;
+import rsb_api.globval.VarpIndices;
+import rsb_api.globval.GlobalWidgetInfo;
+import rsb_api.globval.VarpValues;
+import rsb_api.globval.enums.InterfaceTab;
 import rsb_api.wrappers.*;
 
 import java.util.Arrays;

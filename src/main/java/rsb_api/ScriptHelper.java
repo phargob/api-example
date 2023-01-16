@@ -1,6 +1,6 @@
 package rsb_api;
 
-import net.runelite.rsb.internal.globval.GlobalConfiguration;
+import net.runelite.rsb.internal.GlobalConfiguration;
 
 import rsb_api.wrappers.common.CacheProvider;
 

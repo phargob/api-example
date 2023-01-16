@@ -1,7 +1,7 @@
 package rsb_api.methods;
 
-import net.runelite.rsb.internal.globval.GlobalWidgetInfo;
-import net.runelite.rsb.internal.globval.WidgetIndices;
+import rsb_api.globval.GlobalWidgetInfo;
+import rsb_api.globval.WidgetIndices;
 import rsb_api.wrappers.*;
 
 import java.util.ArrayList;

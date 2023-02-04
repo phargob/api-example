@@ -1,29 +1,18 @@
-package basicloopbot;
+package old_scripts;
 
 import lombok.extern.slf4j.Slf4j;
 
-import net.runelite.rsb.methods.Methods;
-import net.runelite.rsb.internal.globval.enums.InterfaceTab;
-
-import net.runelite.rsb.script.Script;
+import rsb.ScriptRunner;
 import net.runelite.rsb.script.ScriptManifest;
 
-import net.runelite.rsb.wrappers.RSNPC;
-import net.runelite.rsb.wrappers.RSPath;
-import net.runelite.rsb.wrappers.RSPlayer;
-import net.runelite.rsb.wrappers.RSItem;
-import net.runelite.rsb.wrappers.RSTile;
+import rsb.wrappers.*;
+import rsb.globval.enums.InterfaceTab;
 
 
-@ScriptManifest(
-        authors = { "phargob" },
-        name = "FisherDrops",
-        version = 0.1,
-        description = "Fisher Fisher Srops")
-
+@ScriptManifest(authors = { "phargob" }, name = "FisherDrops")
 
 @Slf4j
-public class FisherDrops extends Script {
+public class FisherDrops extends ScriptRunner {
     // XXX to long distance, needs DAX
     // class BarbarianVillageConfig {
 
@@ -55,8 +44,8 @@ public class FisherDrops extends Script {
     ///////////////////////////////////////////////////////////////////////////////
     // lumbridge
 
-    private RSTile fishLocation0 = new RSTile(3242, 3242);
-    private RSTile fishLocation1 = new RSTile(3241, 3249);
+    private RSTile fishLocation0 = new RSTile(3242, 3242, 0);
+    private RSTile fishLocation1 = new RSTile(3241, 3249, 0);
 
     private String fishAction = "Bait";
     private String[] SOME_FISH = {"Raw pike"};
@@ -98,7 +87,7 @@ public class FisherDrops extends Script {
         int dist = 999;
         RSTile closest = null;
         for (final RSTile tile : tiles) {
-            final int distance = calc.distanceTo(tile);
+            final int distance = ctx.calc.distanceTo(tile);
             if (distance < dist) {
                 dist = distance;
                 closest = tile;
@@ -113,13 +102,13 @@ public class FisherDrops extends Script {
         case 1:
             if (random(1, 10) == 5) {
                 if (ctx.game.getCurrentTab() != InterfaceTab.SKILLS) {
-                    game.openTab(InterfaceTab.SKILLS);
+                    ctx.game.openTab(InterfaceTab.SKILLS);
                 }
             }
 
         case 2:
             if (random(1, 20) == 10) {
-                int angle = camera.getAngle() + random(-90, 90);
+                int angle = ctx.camera.getAngle() + random(-90, 90);
                 if (angle < 0) {
                     angle = 0;
                 }
@@ -127,7 +116,7 @@ public class FisherDrops extends Script {
                 if (angle > 359) {
                     angle = 0;
                 }
-                camera.setAngle(angle);
+                ctx.camera.setAngle(angle);
             }
         default:
             if (random(1, 20) < 10) {
@@ -153,7 +142,7 @@ public class FisherDrops extends Script {
         }
 
         // XXX calc from ?
-        int distance = calc.distanceTo(fishLocation0);
+        int distance = ctx.calc.distanceTo(fishLocation0);
         if (distance > 50) {
             l(String.format("Player not near (distance: %d) fishing area - PLEASE WALK THERE", distance));
             this.stopScript(false);
@@ -199,7 +188,7 @@ public class FisherDrops extends Script {
         }
 
         l("Turning to spot");
-        camera.turnTo(spot);
+        ctx.camera.turnTo(spot);
         sleep(random(1000, 2000));
 
         l("Attempting to click spot");
@@ -234,7 +223,7 @@ public class FisherDrops extends Script {
                 l("Path success");
             }
 
-            camera.turnTo(spot);
+            ctx.camera.turnTo(spot);
             return random(2000, 5000);
         }
     }

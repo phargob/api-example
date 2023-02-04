@@ -1,27 +1,17 @@
-package basicloopbot;
-import net.runelite.rsb.methods.NPCs;
-import net.runelite.rsb.methods.Skills;
-import net.runelite.rsb.methods.Methods;
-
-import net.runelite.rsb.script.Script;
-import net.runelite.rsb.script.ScriptManifest;
-import net.runelite.rsb.wrappers.RSItem;
-import net.runelite.rsb.wrappers.RSPath;
-import net.runelite.rsb.wrappers.RSPlayer;
-import net.runelite.rsb.wrappers.RSObject;
-import net.runelite.rsb.wrappers.RSWidget;
-import net.runelite.rsb.internal.globval.enums.InterfaceTab;
+package old_scripts;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.awt.*;
+import rsb.ScriptRunner;
+import net.runelite.rsb.script.ScriptManifest;
 
-@ScriptManifest(
-        authors = { "phargob" }, name = "FireStarter", version = 0.1,
-        description = "FireStarter")
+import rsb.wrappers.*;
+import rsb.globval.enums.InterfaceTab;
+
+@ScriptManifest(authors = { "phargob" }, name = "FireStarter")
 
 @Slf4j
-public class FireStarter extends Script {
+public class FireStarter extends ScriptRunner {
 
     @Override
     public boolean onStart() {

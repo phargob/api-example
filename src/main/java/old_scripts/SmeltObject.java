@@ -1,33 +1,19 @@
-package basicloopbot;
-
-import dax_api.api_lib.DaxWalker;
-import dax_api.api_lib.models.DaxCredentials;
-import dax_api.api_lib.models.DaxCredentialsProvider;
+package old_scripts;
 
 import lombok.extern.slf4j.Slf4j;
-import java.util.Collections;
-import net.runelite.rsb.methods.Methods;
-import net.runelite.rsb.internal.globval.enums.InterfaceTab;
 
-import net.runelite.rsb.script.Script;
+import rsb.ScriptRunner;
 import net.runelite.rsb.script.ScriptManifest;
 
-import net.runelite.rsb.wrappers.RSItem;
-import net.runelite.rsb.wrappers.RSTile;
-import net.runelite.rsb.wrappers.RSPath;
-import net.runelite.rsb.wrappers.RSObject;
-import net.runelite.rsb.wrappers.RSPlayer;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import rsb.wrappers.*;
+import rsb.globval.enums.InterfaceTab;
 
+import dax.DaxWalker;
 
-@ScriptManifest(authors = { "phargob" },
-				name = "smelt object",
-				version = 0.1,
-				description = "smelt object")
-
+@ScriptManifest(authors = { "phargob" }, name = "smelt object")
 
 @Slf4j
-public class SmeltObject extends Script {
+public class SmeltObject extends ScriptRunner {
 
     ///////////////////////////////////////////////////////////////////////////////
     // al kharid
@@ -49,11 +35,11 @@ public class SmeltObject extends Script {
     private State currentState;
 
     private int countBars() {
-        return inventory.getCount(bar);
+        return ctx.inventory.getCount(bar);
     }
 
     private int countObjs() {
-        return inventory.getCount(obj);
+        return ctx.inventory.getCount(obj);
     }
 
     boolean lastWasMoveOffScreen = false;
@@ -64,14 +50,14 @@ public class SmeltObject extends Script {
             lastWasMoveOffScreen = false;
             if (random(1, 10) == 5) {
                 if (ctx.game.getCurrentTab() != InterfaceTab.SKILLS) {
-                    game.openTab(InterfaceTab.SKILLS);
+                    ctx.game.openTab(InterfaceTab.SKILLS);
                 }
             }
 
         case 2:
             lastWasMoveOffScreen = false;
             if (random(1, 20) == 10) {
-                int angle = camera.getAngle() + random(-90, 90);
+                int angle = ctx.camera.getAngle() + random(-90, 90);
                 if (angle < 0) {
                     angle = 0;
                 }
@@ -79,7 +65,7 @@ public class SmeltObject extends Script {
                 if (angle > 359) {
                     angle = 0;
                 }
-                camera.setAngle(angle);
+                ctx.camera.setAngle(angle);
             }
         default:
             if (random(1, 20) < 10) {
@@ -105,7 +91,7 @@ public class SmeltObject extends Script {
     }
 
     private int doWalkTo(RSPlayer myself, RSTile tile, State nextState) {
-        int distance = calc.distanceTo(tile);
+        int distance = ctx.calc.distanceTo(tile);
         log.info(String.format("Player at *doWalkTo* (distance = %d): %s", distance, myself.getLocation()));
 
         if (distance > 100) {
@@ -114,7 +100,7 @@ public class SmeltObject extends Script {
             return 42;
 
         } else if (distance > 5) {
-            DaxWalker.walkTo(new WalkerTile(tile));
+            DaxWalker.walkTo(ctx, ctx.tiles.createWalkerTile(tile), false);
         }
 
         if (distance < 4) {
@@ -123,11 +109,11 @@ public class SmeltObject extends Script {
         }
 
         if (distance >= 4) {
-            log("Pathing to mineTile");
+            log.info("Pathing to mineTile");
             RSPath path = ctx.walking.getPath(tile);
 
             if (path.traverse()) {
-                log("Path success");
+                log.info("Path success");
             }
 
             while (true) {
@@ -137,7 +123,7 @@ public class SmeltObject extends Script {
                 }
             }
 
-            camera.turnTo(tile);
+            ctx.camera.turnTo(tile);
             sleep(random(800, 1600));
         }
 
@@ -151,7 +137,7 @@ public class SmeltObject extends Script {
     }
 
     private int doSmeltAll(RSPlayer myself) {
-        int distance = calc.distanceTo(furnaceTile);
+        int distance = ctx.calc.distanceTo(furnaceTile);
         log.info(String.format("Player at *doSmeltAll* (distance = %d): %s", distance, myself.getLocation()));
 
         if (this.countBars() == 0) {
@@ -240,17 +226,17 @@ public class SmeltObject extends Script {
 
         int objCount = this.countObjs();
         if (objCount > 0) {
-            RSItem objItem = inventory.getItem(obj);
+            RSItem objItem = ctx.inventory.getItem(obj);
             if (objItem == null) {
                 log.error("Could not find obj: " + obj);
                 this.stopScript(true);
                 return -1;
             }
 
-            bank.deposit(objItem.getID(), 0);
+            ctx.bank.deposit(objItem.getID(), 0);
             sleep(random(1000, 2500));
 
-            int afterCount = inventory.getCount(true, objItem.getID());
+            int afterCount = ctx.inventory.getCount(true, objItem.getID());
             log.info(String.format("before (%d) and after (%d) counts for %s", objCount, afterCount, obj));
             if (afterCount != 0) {
                 return random(1000, 2000);
@@ -258,9 +244,9 @@ public class SmeltObject extends Script {
         }
 
         boolean success = false;
-        int barId = bank.getItemID(bar);
+        int barId = ctx.bank.getItemID(bar);
 
-        int leftCount = bank.getCount(barId);
+        int leftCount = ctx.bank.getCount(barId);
         log.info(String.format("Our bank has %s left %d", bar, leftCount));
         if (leftCount < 28) {
             log.warn("Not enough left to continue");
@@ -268,7 +254,7 @@ public class SmeltObject extends Script {
         }
 
         for (int i=0; i<3; i++) {
-            bank.withdraw(barId, 0);
+            ctx.bank.withdraw(barId, 0);
             sleep(random(500, 750));
             if (this.countBars() > 20) {
                 success = true;
@@ -277,13 +263,13 @@ public class SmeltObject extends Script {
         }
 
         log.info(String.format("After banking our inventory %d", this.countBars()));
-        bank.close();
+        ctx.bank.close();
 
         if (success) {
             this.currentState = State.walkToFurnace;
         }
 
-        bank.close();
+        ctx.bank.close();
         return random(1000, 2000);
     }
 
@@ -322,14 +308,6 @@ public class SmeltObject extends Script {
 
     @Override
     public boolean onStart() {
-        // Pass DaxWalker credentials
-        DaxWalker.setCredentials(new DaxCredentialsProvider() {
-            @Override
-            public DaxCredentials getDaxCredentials() {
-                return new DaxCredentials("sub_DPjXXzL5DeSiPf", "PUBLIC-KEY");
-            }
-        });
-
         this.currentState = State.start;
 
         return true;

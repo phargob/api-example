@@ -1,34 +1,23 @@
-package basicloopbot;
+package old_scripts;
 
 import lombok.extern.slf4j.Slf4j;
 
-import net.runelite.rsb.methods.Methods;
-import net.runelite.rsb.internal.globval.enums.InterfaceTab;
-
-import net.runelite.rsb.script.Script;
+import rsb.ScriptRunner;
 import net.runelite.rsb.script.ScriptManifest;
 
-import net.runelite.rsb.wrappers.RSItem;
-import net.runelite.rsb.wrappers.RSTile;
-import net.runelite.rsb.wrappers.RSObject;
-import net.runelite.rsb.wrappers.RSPlayer;
+import rsb.wrappers.*;
+import rsb.globval.enums.InterfaceTab;
 
-
-@ScriptManifest(
-        authors = { "phargob" },
-        name = "Craft rings",
-        version = 0.1,
-        description = "Craft rings")
-
+@ScriptManifest(authors = { "phargob" }, name = "Craft rings")
 
 @Slf4j
-public class CraftRings extends Script {
+public class CraftRings extends ScriptRunner {
 
     ///////////////////////////////////////////////////////////////////////////////
     // edgeville
 
-    private RSTile bankTile = new RSTile(3096, 3494);
-    private RSTile furnaceTile = new RSTile(3109, 3499);
+    private RSTile bankTile = new RSTile(3096, 3494, 0);
+    private RSTile furnaceTile = new RSTile(3109, 3499, 0);
     private final int FURNACE_EDGEVILLE_OBJECT_ID = 16469;
 
     String bar = "Gold bar";
@@ -51,14 +40,14 @@ public class CraftRings extends Script {
             lastWasMoveOffScreen = false;
             if (random(1, 10) == 5) {
                 if (ctx.game.getCurrentTab() != InterfaceTab.SKILLS) {
-                    game.openTab(InterfaceTab.SKILLS);
+                    ctx.game.openTab(InterfaceTab.SKILLS);
                 }
             }
 
         case 2:
             lastWasMoveOffScreen = false;
             if (random(1, 20) == 10) {
-                int angle = camera.getAngle() + random(-90, 90);
+                int angle = ctx.camera.getAngle() + random(-90, 90);
                 if (angle < 0) {
                     angle = 0;
                 }
@@ -66,7 +55,7 @@ public class CraftRings extends Script {
                 if (angle > 359) {
                     angle = 0;
                 }
-                camera.setAngle(angle);
+                ctx.camera.setAngle(angle);
             }
         default:
             if (random(1, 20) < 10) {
@@ -80,11 +69,11 @@ public class CraftRings extends Script {
     }
 
     private int countBars() {
-        return inventory.getCount(bar);
+        return ctx.inventory.getCount(bar);
     }
 
     private int countRings() {
-        return inventory.getCount(ring);
+        return ctx.inventory.getCount(ring);
     }
 
     private int doStart(RSPlayer myself) {
@@ -99,23 +88,23 @@ public class CraftRings extends Script {
     }
 
     private int doBank(RSPlayer myself) {
-        int distance = calc.distanceTo(bankTile);
+        int distance = ctx.calc.distanceTo(bankTile);
         log.info(String.format("Player at *doBank* (distance = %d): %s", distance, myself.getLocation()));
 
-        if (!calc.tileOnScreen(bankTile)) {
+        if (!ctx.calc.tileOnScreen(bankTile)) {
             log.info("Distance : " + myself.getLocation());
-            camera.turnTo(bankTile);
+            ctx.camera.turnTo(bankTile);
             ctx.walking.walkTileOnScreen(bankTile);
             return random(1000, 1500);
         }
 
-        if (!bank.isOpen()) {
-            if (bank.open()) {
+        if (!ctx.bank.isOpen()) {
+            if (ctx.bank.open()) {
                 sleep(random(500, 750));
             }
 
             int failCount = 0;
-            while (!bank.isOpen()) {
+            while (!ctx.bank.isOpen()) {
                 sleep(50);
                 failCount++;
                 if (failCount > 30) {
@@ -126,17 +115,17 @@ public class CraftRings extends Script {
 
         int ringCount = this.countRings();
         if (ringCount > 0) {
-            RSItem ringItem = inventory.getItem(ring);
+            RSItem ringItem = ctx.inventory.getItem(ring);
             if (ringItem == null) {
                 log.error("Could not find ringItem: " + ring);
                 this.stopScript(true);
                 return -1;
             }
 
-            bank.deposit(ringItem.getID(), 0);
+            ctx.bank.deposit(ringItem.getID(), 0);
             sleep(random(1000, 2500));
 
-            int afterCount = inventory.getCount(true, ringItem.getID());
+            int afterCount = ctx.inventory.getCount(true, ringItem.getID());
             log.info(String.format("before (%d) and after (%d) counts for %s", ringCount, afterCount, ring));
             if (afterCount != 0) {
                 return random(1000, 2000);
@@ -144,9 +133,9 @@ public class CraftRings extends Script {
         }
 
         boolean success = false;
-        int barId = bank.getItemID(bar);
+        int barId = ctx.bank.getItemID(bar);
 
-        int leftCount = bank.getCount(barId);
+        int leftCount = ctx.bank.getCount(barId);
         log.info(String.format("Our bank has %s left %d", bar, leftCount));
         if (leftCount < 28) {
             log.warn("Not enough left to continue");
@@ -154,7 +143,7 @@ public class CraftRings extends Script {
         }
 
         for (int i=0; i<3; i++) {
-            bank.withdraw(barId, 0);
+            ctx.bank.withdraw(barId, 0);
             sleep(random(500, 750));
             if (this.countBars() > 20) {
                 success = true;
@@ -163,24 +152,24 @@ public class CraftRings extends Script {
         }
 
         log.info(String.format("After banking our inventory %d", this.countBars()));
-        bank.close();
+        ctx.bank.close();
 
         if (success) {
             this.currentState = State.smelt;
         }
 
-        bank.close();
+        ctx.bank.close();
         return random(1000, 2000);
     }
 
 
     private int doSmelt(RSPlayer myself) {
-        int distance = calc.distanceTo(furnaceTile);
+        int distance = ctx.calc.distanceTo(furnaceTile);
         log.info(String.format("Player at *doSmelt* (distance = %d): %s", distance, myself.getLocation()));
 
-        if (!calc.tileOnScreen(furnaceTile)) {
+        if (!ctx.calc.tileOnScreen(furnaceTile)) {
             log.info("Distance : " + myself.getLocation());
-            camera.turnTo(furnaceTile);
+            ctx.camera.turnTo(furnaceTile);
             ctx.walking.walkTileOnScreen(furnaceTile);
             return random(1000, 1500);
         }

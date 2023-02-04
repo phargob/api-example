@@ -1,31 +1,18 @@
-package basicloopbot;
-
-import net.runelite.rsb.methods.NPCs;
-import net.runelite.rsb.methods.Skills;
-import net.runelite.rsb.methods.Methods;
-
-import net.runelite.rsb.script.Script;
-import net.runelite.rsb.script.ScriptManifest;
-import net.runelite.rsb.wrappers.RSItem;
-import net.runelite.rsb.wrappers.RSPath;
-import net.runelite.rsb.wrappers.RSTile;
-import net.runelite.rsb.wrappers.RSPlayer;
-import net.runelite.rsb.wrappers.RSObject;
-import net.runelite.rsb.wrappers.RSWidget;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
-import net.runelite.rsb.internal.globval.enums.InterfaceTab;
-
+package old_scripts;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.awt.*;
-import java.awt.event.*;
+import rsb.ScriptRunner;
+import net.runelite.rsb.script.ScriptManifest;
 
-@ScriptManifest(authors = { "phargob" }, name = "miner cambozaal",
-				version = 0.2, description = "miner cambozaal")
+import rsb.wrappers.*;
+import rsb.globval.enums.InterfaceTab;
+
+
+@ScriptManifest(authors = { "phargob" }, name = "miner cambozaal")
 
 @Slf4j
-public class MineCambozaal extends Script {
+public class MineCambozaal extends ScriptRunner {
 
     private int leastDistance = 6;
     private String mineThis = "Barronite";
@@ -104,14 +91,14 @@ public class MineCambozaal extends Script {
             lastWasMoveOnScreen = false;
             if (random(1, 10) == 5) {
                 if (ctx.game.getCurrentTab() != InterfaceTab.SKILLS) {
-                    game.openTab(InterfaceTab.SKILLS);
+                    ctx.game.openTab(InterfaceTab.SKILLS);
                 }
             }
 
         case 2:
             lastWasMoveOnScreen = false;
             if (random(1, 20) == 10) {
-                int angle = camera.getAngle() + random(-90, 90);
+                int angle = ctx.camera.getAngle() + random(-90, 90);
                 if (angle < 0) {
                     angle = 0;
                 }
@@ -119,7 +106,7 @@ public class MineCambozaal extends Script {
                 if (angle > 359) {
                     angle = 0;
                 }
-                camera.setAngle(angle);
+                ctx.camera.setAngle(angle);
             }
         default:
             if (random(1, 20) < 15) {
@@ -161,7 +148,7 @@ public class MineCambozaal extends Script {
 
     private boolean doMine() {
         RSPlayer myself = getMyPlayer();
-        int distance = calc.distanceTo(mineTile);
+        int distance = ctx.calc.distanceTo(mineTile);
         log.info(String.format("Player at *doMine* (distance = %d): %s", distance, myself.getLocation()));
 
         // dump local objects
@@ -192,7 +179,7 @@ public class MineCambozaal extends Script {
 							   closestDist, choice.getID(), choice.isOnScreen()));
 
 		if (!choice.isOnScreen()) {
-			camera.turnTo(choice.getLocation());
+			ctx.camera.turnTo(choice.getLocation());
 			sleep(random(800, 1600));
 			if (!choice.isOnScreen()) {
 				return false;
@@ -209,7 +196,7 @@ public class MineCambozaal extends Script {
                 log.info("Move there");
             }
 
-            camera.turnTo(choice.getLocation());
+            ctx.camera.turnTo(choice.getLocation());
             sleep(random(1000, 2000));
 			return false;
 		}

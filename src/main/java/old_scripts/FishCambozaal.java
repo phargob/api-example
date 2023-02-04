@@ -1,32 +1,27 @@
-package basicloopbot;
+package old_scripts;
 
 import lombok.extern.slf4j.Slf4j;
 
-import net.runelite.rsb.methods.Methods;
-import net.runelite.rsb.internal.globval.enums.InterfaceTab;
-
-import net.runelite.rsb.script.Script;
+import rsb.ScriptRunner;
 import net.runelite.rsb.script.ScriptManifest;
 
-import net.runelite.rsb.wrappers.RSObject;
-import net.runelite.rsb.wrappers.RSNPC;
-import net.runelite.rsb.wrappers.RSPath;
-import net.runelite.rsb.wrappers.RSPlayer;
-import net.runelite.rsb.wrappers.RSItem;
-import net.runelite.rsb.wrappers.RSTile;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import rsb.wrappers.RSObject;
+import rsb.wrappers.RSNPC;
+import rsb.wrappers.RSPath;
+import rsb.wrappers.RSPlayer;
+import rsb.wrappers.RSItem;
+import rsb.wrappers.RSTile;
+import rsb.globval.enums.InterfaceTab;
 
 import java.awt.event.*;
 
 @ScriptManifest(
         authors = { "phargob" },
-        name = "Fish at Cambozaal",
-        version = 0.1,
-        description = "Fish at Cambozaal")
+        name = "Fish at Cambozaal")
 
 
 @Slf4j
-public class FishCambozaal extends Script {
+public class FishCambozaal extends ScriptRunner {
     private String fishAction = "Small Net";
     private RSTile fishLocation = new RSTile(2930, 5776, 0);
     private RSTile otherLocation = new RSTile(2935, 5772, 0);
@@ -57,7 +52,7 @@ public class FishCambozaal extends Script {
         int dist = 999;
         RSTile closest = null;
         for (final RSTile tile : tiles) {
-            final int distance = calc.distanceTo(tile);
+            final int distance = ctx.calc.distanceTo(tile);
             if (distance < dist) {
                 dist = distance;
                 closest = tile;
@@ -75,14 +70,14 @@ public class FishCambozaal extends Script {
             lastWasMoveOffScreen = false;
             if (random(1, 10) == 5) {
                 if (ctx.game.getCurrentTab() != InterfaceTab.SKILLS) {
-                    game.openTab(InterfaceTab.SKILLS);
+                    ctx.game.openTab(InterfaceTab.SKILLS);
                 }
             }
 
         case 2:
             lastWasMoveOffScreen = false;
             if (random(1, 20) == 10) {
-                int angle = camera.getAngle() + random(-90, 90);
+                int angle = ctx.camera.getAngle() + random(-90, 90);
                 if (angle < 0) {
                     angle = 0;
                 }
@@ -90,7 +85,7 @@ public class FishCambozaal extends Script {
                 if (angle > 359) {
                     angle = 0;
                 }
-                camera.setAngle(angle);
+                ctx.camera.setAngle(angle);
             }
         default:
             if (random(1, 20) < 10) {
@@ -142,7 +137,7 @@ public class FishCambozaal extends Script {
         log.info("Player at *findFishingSpot* : " + myself.getLocation());
 
 		// XXX calc from ?
-        int distance = calc.distanceTo(fishLocation);
+        int distance = ctx.calc.distanceTo(fishLocation);
         if (distance > 50) {
             log.info(String.format("Player not near (distance: %d) fishing area - PLEASE WALK THERE", distance));
             this.stopScript(false);
@@ -159,7 +154,7 @@ public class FishCambozaal extends Script {
         }
 
         log.info("Turning to spot");
-        camera.turnTo(spot.getLocation());
+        ctx.camera.turnTo(spot.getLocation());
         sleep(random(1000, 2000));
 
         final int maxTries = 3;
@@ -196,7 +191,7 @@ public class FishCambozaal extends Script {
                 log.info("Path success");
             }
 
-            camera.turnTo(spot);
+            ctx.camera.turnTo(spot);
             return random(2000, 5000);
         }
     }
@@ -248,7 +243,7 @@ public class FishCambozaal extends Script {
 				return random(2000, 10000);
 			}
 
-			sleep(50, 250);
+			sleep(random(50, 250));
 		}
 
 		RSObject table = ctx.objects.getNearest(CAMBOZAAL_PREPARATION_TABLE_ID);
@@ -265,7 +260,7 @@ public class FishCambozaal extends Script {
                 log.info("Move there");
             }
 
-            camera.turnTo(table.getLocation());
+            ctx.camera.turnTo(table.getLocation());
             sleep(random(1000, 2000));
 		}
 
@@ -320,7 +315,7 @@ public class FishCambozaal extends Script {
 				return random(2000, 10000);
 			}
 
-			sleep(50, 250);
+			sleep(random(50, 250));
 		}
 
 

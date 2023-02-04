@@ -1,31 +1,19 @@
-package basicloopbot;
+package old_scripts;
 
 import lombok.extern.slf4j.Slf4j;
 
-import dax_api.api_lib.DaxWalker;
-
-import net.runelite.rsb.methods.Methods;
-import net.runelite.rsb.internal.globval.enums.InterfaceTab;
-
-import net.runelite.rsb.script.Script;
+import rsb.ScriptRunner;
 import net.runelite.rsb.script.ScriptManifest;
 
-import net.runelite.rsb.wrappers.RSItem;
-import net.runelite.rsb.wrappers.RSTile;
-import net.runelite.rsb.wrappers.RSObject;
-import net.runelite.rsb.wrappers.RSPlayer;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import rsb.wrappers.*;
+import rsb.globval.enums.InterfaceTab;
 
+import dax.DaxWalker;
 
-@ScriptManifest(
-        authors = { "phargob" },
-        name = "Cooking 101",
-        version = 0.1,
-        description = "Cooking begin")
-
+@ScriptManifest( authors = { "phargob" }, name = "Cooking 101")
 
 @Slf4j
-public class Cooking extends Script {
+public class Cooking extends ScriptRunner {
 
     ///////////////////////////////////////////////////////////////////////////////
     // al kharid
@@ -55,14 +43,14 @@ public class Cooking extends Script {
             lastWasMoveOffScreen = false;
             if (random(1, 10) == 5) {
                 if (ctx.game.getCurrentTab() != InterfaceTab.SKILLS) {
-                    game.openTab(InterfaceTab.SKILLS);
+                    ctx.game.openTab(InterfaceTab.SKILLS);
                 }
             }
 
         case 2:
             lastWasMoveOffScreen = false;
             if (random(1, 20) == 10) {
-                int angle = camera.getAngle() + random(-90, 90);
+                int angle = ctx.camera.getAngle() + random(-90, 90);
                 if (angle < 0) {
                     angle = 0;
                 }
@@ -70,7 +58,7 @@ public class Cooking extends Script {
                 if (angle > 359) {
                     angle = 0;
                 }
-                camera.setAngle(angle);
+                ctx.camera.setAngle(angle);
             }
         default:
             if (random(1, 20) < 10) {
@@ -96,7 +84,7 @@ public class Cooking extends Script {
     }
 
     private int doWalkTo(RSPlayer myself, RSTile tile, State nextState) {
-        int distance = calc.distanceTo(tile);
+        int distance = ctx.calc.distanceTo(tile);
         log.info(String.format("Player at *doWalkTo* (distance = %d): %s", distance, myself.getLocation()));
 
         if (distance > 100) {
@@ -105,12 +93,12 @@ public class Cooking extends Script {
             return 42;
 
         } else if (distance > 8) {
-            DaxWalker.walkTo(new WalkerTile(tile));
+            DaxWalker.walkTo(ctx, ctx.tiles.createWalkerTile(tile), false);
         }
 
-        distance = calc.distanceTo(tile);
+        distance = ctx.calc.distanceTo(tile);
         if (distance <= 8) {
-            camera.turnTo(tile);
+            ctx.camera.turnTo(tile);
             sleep(random(800, 1600));
 
             this.currentState = nextState;

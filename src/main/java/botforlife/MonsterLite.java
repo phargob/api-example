@@ -2,24 +2,24 @@ package botforlife;
 
 import lombok.extern.slf4j.Slf4j;
 
-import rsb_api.ScriptRunner;
+import rsb.ScriptRunner;
 
 import net.runelite.api.NPC;
 
 import net.runelite.rsb.script.ScriptManifest;
 
-import rsb_api.globval.VarpIndices;
-import rsb_api.globval.GlobalWidgetInfo;
-import rsb_api.globval.VarpValues;
+import rsb.globval.VarpIndices;
+import rsb.globval.GlobalWidgetInfo;
+import rsb.globval.VarpValues;
 
-import rsb_api.globval.enums.InterfaceTab;
+import rsb.globval.enums.InterfaceTab;
 
-import rsb_api.methods.NPCs;
+import rsb.methods.NPCs;
 
-import rsb_api.wrappers.RSNPC;
-import rsb_api.wrappers.RSGroundItem;
-import rsb_api.wrappers.RSItem;
-import rsb_api.wrappers.RSPlayer;
+import rsb.wrappers.RSNPC;
+import rsb.wrappers.RSGroundItem;
+import rsb.wrappers.RSItem;
+import rsb.wrappers.RSPlayer;
 
 import java.util.ArrayList;
 

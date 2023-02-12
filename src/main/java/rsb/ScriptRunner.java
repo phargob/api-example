@@ -2,7 +2,6 @@ package rsb;
 
 import net.runelite.rsb.script.Script;
 
-import rsb.RemotePy;
 import rsb.methods.MethodContext;
 
 import rsb.wrappers.RSPlayer;
@@ -58,10 +57,12 @@ public abstract class ScriptRunner extends Script {
         return ctx.players.getMyPlayer();
     }
 
-
     protected void sleep(int msecs) {
         sleep(msecs, false);
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // internal:
 
     private void sleep(int msecs, boolean earlyBreakAllowed) {
         try {
@@ -78,15 +79,13 @@ public abstract class ScriptRunner extends Script {
             }
 
         } catch (InterruptedException e) {
+            ;
         } catch (ThreadDeath td) {
             log.error("ThreadDeath in Script.sleep()");
         }
     }
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // internal:
-
-    public void onInit() {
+    public final void onInit() {
         log.info("Creating context");
 
         this.ctx = new MethodContext(bot.getProxy(), bot.getInputManager());

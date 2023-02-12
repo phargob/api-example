@@ -14,8 +14,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
     testImplementation 'org.slf4j:slf4j-simple:2.0.5'
-
-    implementation group: 'org.python', name: 'jython-standalone', version: '2.7.3'
 }
 
 tasks.withType(JavaCompile) {
@@ -89,17 +87,14 @@ enum OperatingSystem {
             treeCopy(source, target)
         }
     }
-
 }
 
 class ScriptTaskJar extends DefaultTask {
     @InputDirectory
-    var scriptDependency =
-            project.file("${project.buildDir}/libs")
+    var scriptDependency = project.file("${project.buildDir}/libs")
 
     @OutputDirectory
-    var outputDir =
-            project.file(OperatingSystem.getBotDirectory())
+    var outputDir = project.file(OperatingSystem.getBotDirectory())
 
     @TaskAction
     def copyFiles() {
@@ -108,7 +103,6 @@ class ScriptTaskJar extends DefaultTask {
 }
 
 task push(type: ScriptTaskJar) {
-    group = 'TEST'
     dependsOn(jar)
 }
 

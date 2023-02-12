@@ -1,2 +1,2 @@
-include ":OSRSBotx"
-project(":OSRSBotx").projectDir = file("../OSRSBotx")
+include ":OSRSBot"
+project(":OSRSBot").projectDir = file("../OSRSBot")

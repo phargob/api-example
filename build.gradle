@@ -2,27 +2,21 @@ plugins {
     id 'java'
 }
 
-
 repositories {
     mavenLocal()
     mavenCentral()
 }
 
 dependencies {
-    compileOnly 'org.projectlombok:lombok:1.18.24'
+    implementation project(":OSRSBot")
+
+    implementation 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
-    testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.slf4j:slf4j-simple:2.0.5'
 
-    implementation group: 'net.sf.jopt-simple', name: 'jopt-simple', version: '5.0.4'
-
-    // We want these both at compile and at runtime.
-    // So we use implementation instead of compileOnly or runtimeOnly
-    implementation project(":OSRSBotx")
+    implementation group: 'org.python', name: 'jython-standalone', version: '2.7.3'
 }
-
-group = 'osrsb'
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
